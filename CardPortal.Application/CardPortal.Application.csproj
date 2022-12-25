@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CardPortal.Domain\CardPortal.Domain.csproj" />
+    <ProjectReference Include="..\CardPortal.Persistence\CardPortal.Persistence.csproj" />
+  </ItemGroup>
+
+</Project>

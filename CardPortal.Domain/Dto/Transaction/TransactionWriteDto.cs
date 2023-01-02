@@ -6,7 +6,7 @@ namespace CardPortal.Domain.Dto.Transaction
     {
         public int Id { get; set; }
 
-        public DateTime Date { get; set; }
+        public string Date { get; set; }
 
         public double Amount { get; set; }
 
@@ -15,5 +15,7 @@ namespace CardPortal.Domain.Dto.Transaction
         public string CardNumber { get; set; } = string.Empty;
 
         public int VendorId { get; set; }
+
+        public int UserId { get; set; }
     }
 }

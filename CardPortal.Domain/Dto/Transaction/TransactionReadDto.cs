@@ -15,5 +15,7 @@ namespace CardPortal.Domain.Dto.Transaction
         public string CardNumber { get; set; }= string.Empty;
 
         public int VendorId { get; set; }
+
+        public int UserId { get; set; }
     }
 }

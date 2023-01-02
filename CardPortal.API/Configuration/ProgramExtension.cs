@@ -37,6 +37,11 @@ using CardPortal.Application.Command.Vendor.Address.Area;
 using CardPortal.Application.Command.Vendor.Address.City;
 using CardPortal.Application.Command.Vendor.Contact.Contact;
 using CardPortal.Application.Command.Vendor.Contact.ContactType;
+using Microsoft.AspNetCore.Identity;
+using CardPortal.Persistence;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 #endregion Reference
 
@@ -44,6 +49,9 @@ namespace CardPortal.API.Configuration
 {
     public static class ProgramExtension
     {
+
+        #region CustomServices
+
         // Custom Services - <Repository Interface, Repository>
         public static IServiceCollection AddCustomServices(this IServiceCollection services)
         {
@@ -135,5 +143,45 @@ namespace CardPortal.API.Configuration
                 typeof(DeleteContactTypeCommandHandler).GetTypeInfo().Assembly,
             };
         }
+
+        #endregion CustomServices
+
+        #region Auth
+
+        // Custom Services - <Repository Interface, Repository>
+        public static IServiceCollection AddAuth(this IServiceCollection services, IConfiguration configuration)
+        {
+            // Identity
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<AppDbContext>()
+                .AddDefaultTokenProviders();
+
+            // Authentication
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+
+            // Jwt Bearer
+            .AddJwtBearer(options =>
+            {
+                options.SaveToken = true;
+                options.RequireHttpsMetadata = false;
+                options.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidAudience = configuration["JWT:ValidAudience"],
+                    ValidIssuer = configuration["JWT:ValidIssuer"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]))
+                };
+            });
+
+            return services;
+        }
+
+        #endregion Auth
     }
 }

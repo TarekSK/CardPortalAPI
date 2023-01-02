@@ -9,6 +9,19 @@ namespace CardPortal.API.Controllers
     public class AccountController : BaseAPIController
     {
         [HttpGet]
+        public async Task<ActionResult> GetAllAccounts()
+        {
+            try
+            {
+                return Ok(await Mediator.Send(new GetAllAccountsQuery()));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
         public async Task<ActionResult> GetUserAccounts(int userId)
         {
             try

@@ -1,4 +1,5 @@
-﻿using static CardPortal.Domain.Helper.Card.CardHelper;
+﻿using CardPortal.Domain.Dto.User;
+using static CardPortal.Domain.Helper.Card.CardHelper;
 
 namespace CardPortal.Domain.Dto.Card
 {
@@ -15,5 +16,7 @@ namespace CardPortal.Domain.Dto.Card
         public CardTypeEnum Type { get; set; }
 
         public CurrencyEnum? Currency { get; set; } = null;
+
+        public int UserId { get; set; }
     }
 }

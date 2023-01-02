@@ -6,7 +6,7 @@ namespace CardPortal.Domain.Dto.Vendor.Contact.Contact
     {
         public int Id { get; set; }
 
-        public ContactTypeWriteDto Type { get; set; }
+        public int ContactTypeId { get; set; }
 
         public string Value { get; set; }
 

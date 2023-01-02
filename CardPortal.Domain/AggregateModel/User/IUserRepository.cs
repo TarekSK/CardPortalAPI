@@ -1,4 +1,5 @@
-﻿using CardPortal.Domain.Helper.ServiceResponse;
+﻿using CardPortal.Domain.AggregateModel.User.Profile;
+using CardPortal.Domain.Helper.ServiceResponse;
 
 namespace CardPortal.Domain.AggregateModel.User
 {
@@ -6,7 +7,7 @@ namespace CardPortal.Domain.AggregateModel.User
     {
         #region UserActions
 
-        Task<ServiceResponse<bool>> Login(string username, string password);
+        Task<ServiceResponse<int>> Login(Login login);
 
         #endregion UserActions
 
@@ -14,7 +15,9 @@ namespace CardPortal.Domain.AggregateModel.User
 
         Task<ServiceResponse> ChangeUsername(int userId, string newUsername);
 
-        Task<ServiceResponse> ChangePassword(int userId, string newPassword);
+        Task<ServiceResponse> ChangeName(ChangeName changeName);
+
+        Task<ServiceResponse> ChangePassword(ChangePassword changePassword);
 
         Task<ServiceResponse<string>> RequestNewPassword(string username);
 

@@ -7,6 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\CardPortal.Domain\CardPortal.Domain.csproj" />
     <ProjectReference Include="..\CardPortal.Persistence\CardPortal.Persistence.csproj" />
   </ItemGroup>

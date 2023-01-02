@@ -24,6 +24,7 @@
         // Might be turn into table if needed in the future
         public enum CurrencyEnum
         {
+            None= -1,
             EUR = 0,
             USD = 1,
         }

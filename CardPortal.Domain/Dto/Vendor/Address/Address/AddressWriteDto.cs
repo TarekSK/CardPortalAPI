@@ -8,7 +8,7 @@ namespace CardPortal.Domain.Dto.Vendor.Address.Address
 
         public string StreetAddress { get; set; } = string.Empty;
 
-        public AreaWriteDto Area { get; set; }
+        public int AreaId { get; set; }
 
         public int VendorId { get; set; }
     }

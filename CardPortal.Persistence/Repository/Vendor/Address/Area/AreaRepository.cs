@@ -24,7 +24,7 @@ namespace CardPortal.Persistence.Repository.Vendor.Address.Area
             try
             {
                 // Get Data
-                var result = await _dataContext.Areas.ToListAsync();
+                var result = await _dataContext.Areas.OrderBy(x => x.Id).ToListAsync();
 
                 // Service Response - Data, OK
                 serviceResponse.Data = result!;

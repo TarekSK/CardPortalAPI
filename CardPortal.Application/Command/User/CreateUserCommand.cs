@@ -15,11 +15,13 @@ namespace CardPortal.Application.Command.User
     {
         private readonly IUserRepository _UserRepository;
         private readonly IMapper _mapper;
+        private readonly IMediator _mediator;
 
-        public CreateUserCommandHandler(IUserRepository UserRepository, IMapper mapper)
+        public CreateUserCommandHandler(IUserRepository UserRepository, IMapper mapper, IMediator mediator)
         {
             _UserRepository = UserRepository;
             _mapper = mapper;
+            _mediator = mediator;
         }
 
         public async Task<ServiceResponse> Handle(CreateUserCommand request, CancellationToken cancellationToken)
@@ -36,6 +38,7 @@ namespace CardPortal.Application.Command.User
                 var result = await _UserRepository.CreateUser(User);
 
                 return result;
+
             }
             catch (Exception ex)
             {

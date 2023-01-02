@@ -2,6 +2,8 @@
 using CardPortal.Application.Command.User;
 using CardPortal.Application.Query.User;
 using CardPortal.Domain.Dto.User;
+using CardPortal.Domain.Dto.User.Login;
+using CardPortal.Domain.Dto.User.Profile;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CardPortal.API.Controllers
@@ -11,11 +13,11 @@ namespace CardPortal.API.Controllers
         #region UserActions
 
         [HttpPost]
-        public async Task<ActionResult> Login(string username, string password)
+        public async Task<ActionResult> Login(LoginDto login)
         {
             try
             {
-                return Ok(await Mediator.Send(new LoginCommand(username, password)));
+                return Ok(await Mediator.Send(new LoginCommand(login)));
             }
             catch (Exception ex)
             {
@@ -41,11 +43,24 @@ namespace CardPortal.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> ChangePassword(int userId, string newPassword)
+        public async Task<ActionResult> ChangeName(ChangeNameDto changeName)
         {
             try
             {
-                return Ok(await Mediator.Send(new ChangePasswordCommand(userId, newPassword)));
+                return Ok(await Mediator.Send(new ChangeNameCommand(changeName)));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> ChangePassword(ChangePasswordDto changePassword)
+        {
+            try
+            {
+                return Ok(await Mediator.Send(new ChangePasswordCommand(changePassword)));
             }
             catch (Exception ex)
             {
@@ -83,12 +98,13 @@ namespace CardPortal.API.Controllers
             }
         }
 
-        [HttpGet]
-        public async Task<ActionResult> GetUser(int userId)
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult> GetUser(int id)
         {
             try
             {
-                return Ok(await Mediator.Send(new GetUserQuery(userId)));
+                return Ok(await Mediator.Send(new GetUserQuery(id)));
             }
             catch (Exception ex)
             {

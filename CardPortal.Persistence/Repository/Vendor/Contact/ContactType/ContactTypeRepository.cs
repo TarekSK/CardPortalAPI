@@ -24,7 +24,7 @@ namespace CardPortal.Persistence.Repository.Vendor.Contact.ContactType
             try
             {
                 // Get Data
-                var result = await _dataContext.ContactTypes.ToListAsync();
+                var result = await _dataContext.ContactTypes.OrderBy(x => x.Id).ToListAsync();
 
                 // Service Response - Data, OK
                 serviceResponse.Data = result!;

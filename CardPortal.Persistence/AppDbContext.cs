@@ -13,6 +13,8 @@ using City = CardPortal.Domain.AggregateModel.Vendor.Address.City.City;
 using Contact = CardPortal.Domain.AggregateModel.Vendor.Contact.Contact.Contact;
 using ContactType = CardPortal.Domain.AggregateModel.Vendor.Contact.ContactType.ContactType;
 using CardPortal.Persistence.Configuration;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 #endregion AggregateModels
 
@@ -29,8 +31,8 @@ namespace CardPortal.Persistence
         {
             base.OnModelCreating(modelBuilder);
 
-            // Seed Data
-            new AppDbContextInitializer(modelBuilder).SeedData();
+            // Seed Data - For Testing
+            // new AppDbContextInitializer(modelBuilder).SeedData();
         }
 
         // Tables

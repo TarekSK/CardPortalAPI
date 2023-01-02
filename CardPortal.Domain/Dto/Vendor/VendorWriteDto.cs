@@ -9,8 +9,8 @@ namespace CardPortal.Domain.Dto.Vendor
 
         public string Name { get; set; } = string.Empty;
 
-        public List<AddressWriteDto> Addresses { get; set; }
+        public List<AddressWriteDto>? Addresses { get; set; }
 
-        public List<ContactWriteDto> Contacts { get; set; }
+        public List<ContactWriteDto>? Contacts { get; set; }
     }
 }

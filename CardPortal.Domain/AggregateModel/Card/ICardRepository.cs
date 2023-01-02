@@ -4,6 +4,8 @@ namespace CardPortal.Domain.AggregateModel.Card
 {
     public interface ICardRepository
     {
+        Task<ServiceResponse<List<Card>>> GetAllCards();
+
         Task<ServiceResponse<List<Card>>> GetUserCards(int userId);
 
         Task<ServiceResponse<Card>> GetCard(int cardId);

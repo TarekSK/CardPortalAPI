@@ -15,5 +15,7 @@ namespace CardPortal.Domain.Dto.Card
         public CardTypeEnum Type { get; set; }
 
         public CurrencyEnum? Currency { get; set; } = null;
+
+        public int UserId { get; set; }
     }
 }

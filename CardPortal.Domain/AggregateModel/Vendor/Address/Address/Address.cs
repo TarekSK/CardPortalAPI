@@ -13,7 +13,7 @@ namespace CardPortal.Domain.AggregateModel.Vendor.Address.Address
         public string StreetAddress { get; set; } = string.Empty;
 
         [Required]
-        public AreaModel Area { get; set; }
+        public int AreaId { get; set; }
 
         [Required]
         public int VendorId { get; set; }
@@ -21,10 +21,10 @@ namespace CardPortal.Domain.AggregateModel.Vendor.Address.Address
         #region ModelInit
 
         // Address - Set
-        public Address(string streetAddress, AreaModel area)
+        public Address(string streetAddress, int areaId)
         {
             StreetAddress = streetAddress;
-            Area = area;
+            AreaId = areaId;
         }
 
         // Address - Init

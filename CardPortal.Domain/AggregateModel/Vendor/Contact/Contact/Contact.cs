@@ -9,7 +9,7 @@ namespace CardPortal.Domain.AggregateModel.Vendor.Contact.Contact
         public int Id { get; set; }
 
         [Required]
-        public ContactTypeModel Type { get; set; }
+        public int ContactTypeId { get; set; }
 
         [MaxLength(50)]
         [Required]
@@ -21,9 +21,9 @@ namespace CardPortal.Domain.AggregateModel.Vendor.Contact.Contact
         #region ModelInit
 
         // Contact - Set
-        public Contact(ContactTypeModel type, string value)
+        public Contact(int contactTypeId, string value)
         {
-            Type = type;
+            ContactTypeId = contactTypeId;
             Value = value;
         }
 

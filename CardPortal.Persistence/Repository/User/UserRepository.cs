@@ -1,4 +1,5 @@
 ﻿using CardPortal.Domain.AggregateModel.User;
+using CardPortal.Domain.AggregateModel.User.Profile;
 using CardPortal.Domain.Helper.ServiceResponse;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
@@ -18,27 +19,52 @@ namespace CardPortal.Persistence.Repository.User
         #region UserActions
 
         // User - Login
-        public async Task<ServiceResponse<bool>> Login(string username, string password)
+        public async Task<ServiceResponse<int>> Login(Login login)
         {
             // Service Response - Init
-            var serviceResponse = new ServiceResponse<bool>();
+            var serviceResponse = new ServiceResponse<int>();
 
             try
             {
                 // Get User
-                var user = await GetUserByUsername(username);
-                // Change Last Login Time
-                user.Data.LastLoginTime = DateTime.Now;
-                // Update User
-                var result = await UpdateUser(user.Data);
+                var user = await GetUserByUsername(login.Username);
 
-                // Service Response - Data, OK
-                serviceResponse.Data = true;
-                serviceResponse.StatusCode = result.StatusCode;
+                // Check User
+                if (user.Data != null)
+                {
+                    // Check Password
+                    if (user.Data.Password == login.Password)
+                    {
+                        // Change Last Login Time
+                        user.Data.LastLoginTime = DateTime.Now;
+                        // Update User
+                        var result = await UpdateUser(user.Data);
+
+                        // Service Response - OK
+                        serviceResponse.Data = user.Data.Id;
+                        serviceResponse.StatusCode = HttpStatusCode.OK;
+                        serviceResponse.StatusCode = result.StatusCode;
+                    }
+                    else
+                    {
+                        // Service Response - Unauthorized
+                        serviceResponse.Data = 0;
+                        serviceResponse.StatusCode = HttpStatusCode.Unauthorized;
+                        serviceResponse.Errors.Add("Wrong Credentials");
+                    }
+                }
+                else
+                {
+                    // Service Response - NotFound
+                    serviceResponse.Data = 0;
+                    serviceResponse.StatusCode = HttpStatusCode.NotFound;
+                    serviceResponse.Errors.Add("Wrong Credentials");
+                }
             }
             catch (Exception ex)
             {
                 // Service Response - Error
+                serviceResponse.Data = 0;
                 serviceResponse.StatusCode = HttpStatusCode.InternalServerError;
                 serviceResponse.Errors.Add(ex.Message);
             }
@@ -79,7 +105,7 @@ namespace CardPortal.Persistence.Repository.User
         }
 
         // User - Change Password
-        public async Task<ServiceResponse> ChangePassword(int userId, string newPassword)
+        public async Task<ServiceResponse> ChangeName(ChangeName changeName)
         {
             // Service Response - Init
             var serviceResponse = new ServiceResponse();
@@ -87,9 +113,43 @@ namespace CardPortal.Persistence.Repository.User
             try
             {
                 // Get User
-                var user = await GetUser(userId);
+                var user = await GetUser(changeName.Id);
+
+                // Change Last Name
+                user.Data.LastName = changeName.LastName;
+                // Change First Name
+                user.Data.FirstName = changeName.FirstName;
+
+                // Update User
+                var result = await UpdateUser(user.Data);
+
+                // Service Response - OK
+                serviceResponse.StatusCode = result.StatusCode;
+            }
+            catch (Exception ex)
+            {
+                // Service Response - Error
+                serviceResponse.StatusCode = HttpStatusCode.InternalServerError;
+                serviceResponse.Errors.Add(ex.Message);
+            }
+
+            return serviceResponse;
+        }
+
+        // User - Change Password
+        public async Task<ServiceResponse> ChangePassword(ChangePassword changePassword)
+        {
+            // Service Response - Init
+            var serviceResponse = new ServiceResponse();
+
+            try
+            {
+                // Get User
+                var user = await GetUser(changePassword.Id);
+
                 // Change Password
-                user.Data.Password = newPassword;
+                user.Data.Password = changePassword.Password;
+
                 // Update User
                 var result = await UpdateUser(user.Data);
 
@@ -116,13 +176,37 @@ namespace CardPortal.Persistence.Repository.User
             {
                 // Get User
                 var user = await GetUserByUsername(username);
-                // Change Password By Requested Password
-                user.Data.Password = NewPasswordGenerate();
-                // Update User
-                var result = await UpdateUser(user.Data);
 
-                // Service Response - OK
-                serviceResponse.StatusCode = result.StatusCode;
+                if (user.StatusCode == HttpStatusCode.OK)
+                {
+                    // New Password - Generate
+                    var newPassword = NewPasswordGenerate();
+
+                    // Change Password By Requested Password
+                    user.Data.Password = newPassword;
+
+                    // Update User
+                    var result = await UpdateUser(user.Data);
+
+
+                    // Email Content - Get
+                    string emailContent = NewPasswordEmailContent(user.Data.FirstName, newPassword);
+
+                    // Send New Password
+                    var emailSend = 
+                        EmailSender.EmailSend(
+                            emailTo: user.Data.Username, 
+                            subject: "Your Requested Password", 
+                            content: emailContent);
+
+                    // Service Response - OK
+                    serviceResponse.StatusCode = emailSend.StatusCode;
+                }
+                else
+                {
+                    // Service Response - Error
+                    serviceResponse.StatusCode = HttpStatusCode.NotFound;
+                }
             }
             catch (Exception ex)
             {
@@ -157,6 +241,12 @@ namespace CardPortal.Persistence.Repository.User
             return new string(stringChars);
         }
 
+        // New Password Email Content
+        private string NewPasswordEmailContent(string userFirstName, string newPassword)
+        {
+            return $"Hello, {userFirstName}" + "\n" + "Your Requested Password is ready: " + "\n" + newPassword;
+        }
+
         #endregion NewPasswordGenerate
 
         #endregion ProfileActions
@@ -172,7 +262,7 @@ namespace CardPortal.Persistence.Repository.User
             try
             {
                 // Get Data
-                var result = await _dataContext.Users.ToListAsync();
+                var result = await _dataContext.Users.OrderBy(x => x.Id).ToListAsync();
 
                 // Service Response - Data, OK
                 serviceResponse.Data = result!;
@@ -224,9 +314,17 @@ namespace CardPortal.Persistence.Repository.User
                 // Get Data
                 var result = await _dataContext.Users.FirstOrDefaultAsync(x => x.Username == username);
 
-                // Service Response - Data, OK
-                serviceResponse.Data = result!;
-                serviceResponse.StatusCode = HttpStatusCode.OK;
+                if (result != null)
+                {
+                    // Service Response - Data, OK
+                    serviceResponse.Data = result!;
+                    serviceResponse.StatusCode = HttpStatusCode.OK;
+                }
+                else
+                {
+                    // Service Response - Not Found
+                    serviceResponse.StatusCode = HttpStatusCode.NotFound;
+                }
             }
             catch (Exception ex)
             {

@@ -15,6 +15,31 @@ namespace CardPortal.Persistence.Repository.Transaction
             _dataContext = dataContext;
         }
 
+        // Transactions - Get
+        public async Task<ServiceResponse<List<TransactionModel>>> GetAllTransactions()
+        {
+            // Service Response - Init
+            var serviceResponse = new ServiceResponse<List<TransactionModel>>();
+
+            try
+            {
+                // Get Data
+                var result = await _dataContext.Transactions.OrderBy(x => x.Id).ToListAsync();
+
+                // Service Response - Data, OK
+                serviceResponse.Data = result!;
+                serviceResponse.StatusCode = HttpStatusCode.OK;
+            }
+            catch (Exception ex)
+            {
+                // Service Response - Error
+                serviceResponse.StatusCode = HttpStatusCode.InternalServerError;
+                serviceResponse.Errors.Add(ex.Message);
+            }
+
+            return serviceResponse;
+        }
+
         // User Transactions - Get
         public async Task<ServiceResponse<List<TransactionModel>>> GetUserTransactions(int userId)
         {
@@ -24,7 +49,7 @@ namespace CardPortal.Persistence.Repository.Transaction
             try
             {
                 // Get Data
-                var result = await _dataContext.Transactions.Where(x => x.UserId == userId).ToListAsync();
+                var result = await _dataContext.Transactions.Where(x => x.UserId == userId).OrderBy(x => x.Id).ToListAsync();
 
                 // Service Response - Data, OK
                 serviceResponse.Data = result!;

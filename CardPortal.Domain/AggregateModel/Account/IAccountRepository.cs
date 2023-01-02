@@ -4,6 +4,8 @@ namespace CardPortal.Domain.AggregateModel.Account
 {
     public interface IAccountRepository
     {
+        Task<ServiceResponse<List<Account>>> GetAllAccounts();
+
         Task<ServiceResponse<List<Account>>> GetUserAccounts(int userId);
 
         Task<ServiceResponse<Account>> GetAccount(int accountId);

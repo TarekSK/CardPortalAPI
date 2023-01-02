@@ -9,28 +9,28 @@ using System.Net;
 
 namespace CardPortal.Application.Command.User
 {
-    public record ChangePasswordCommand(ChangePasswordDto changePassword) : IRequest<ServiceResponse>;
+    public record ChangeNameCommand(ChangeNameDto changeName) : IRequest<ServiceResponse>;
 
-    public class ChangePasswordCommandHandler : IRequestHandler<ChangePasswordCommand, ServiceResponse>
+    public class ChangeNameCommandHandler : IRequestHandler<ChangeNameCommand, ServiceResponse>
     {
         private readonly IUserRepository _UserRepository;
         private readonly IMapper _mapper;
 
-        public ChangePasswordCommandHandler(IUserRepository userRepository, IMapper mapper)
+        public ChangeNameCommandHandler(IUserRepository userRepository, IMapper mapper)
         {
             _UserRepository = userRepository;
             _mapper = mapper;
         }
 
-        public async Task<ServiceResponse> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
+        public async Task<ServiceResponse> Handle(ChangeNameCommand request, CancellationToken cancellationToken)
         {
             try
             {
-                // Change Password Model - From Change Password Dto - Map
-                var changePasswordModel = _mapper.Map<ChangePassword>(request.changePassword);
+                // Change Name Model - From Change Name Dto - Map
+                var changeNameModel = _mapper.Map<ChangeName>(request.changeName);
 
-                // User - Change Password
-                var result = await _UserRepository.ChangePassword(changePassword: changePasswordModel);
+                // User - Change Name
+                var result = await _UserRepository.ChangeName(changeName: changeNameModel);
 
                 return result;
             }

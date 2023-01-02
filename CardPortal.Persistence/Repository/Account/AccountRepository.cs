@@ -15,6 +15,31 @@ namespace CardPortal.Persistence.Repository.Account
             _dataContext = dataContext;
         }
 
+        // Accounts - Get
+        public async Task<ServiceResponse<List<AccountModel>>> GetAllAccounts()
+        {
+            // Service Response - Init
+            var serviceResponse = new ServiceResponse<List<AccountModel>>();
+
+            try
+            {
+                // Get Data
+                var result = await _dataContext.Accounts.OrderBy(x => x.Id).ToListAsync();
+
+                // Service Response - Data, OK
+                serviceResponse.Data = result!;
+                serviceResponse.StatusCode = HttpStatusCode.OK;
+            }
+            catch (Exception ex)
+            {
+                // Service Response - Error
+                serviceResponse.StatusCode = HttpStatusCode.InternalServerError;
+                serviceResponse.Errors.Add(ex.Message);
+            }
+
+            return serviceResponse;
+        }
+
         // User Account - Get
         public async Task<ServiceResponse<List<AccountModel>>> GetUserAccounts(int userId)
         {
@@ -24,7 +49,7 @@ namespace CardPortal.Persistence.Repository.Account
             try
             {
                 // Get Data
-                var result = await _dataContext.Accounts.Where(x => x.UserId == userId).ToListAsync();
+                var result = await _dataContext.Accounts.Where(x => x.UserId == userId).OrderBy(x => x.Id).ToListAsync();
 
                 // Service Response - Data, OK
                 serviceResponse.Data = result!;

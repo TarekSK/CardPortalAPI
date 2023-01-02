@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 
 namespace CardPortal.Domain.AggregateModel.User
 {
@@ -28,8 +29,6 @@ namespace CardPortal.Domain.AggregateModel.User
         public DateTime? CreatedDate { get; set; }
 
         public DateTime? LastPasswordChangeDate { get; set; }
-
-        public List<Account.Account> Accounts { get; set; }
 
         #region ModelInit
 

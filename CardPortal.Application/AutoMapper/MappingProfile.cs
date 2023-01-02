@@ -2,6 +2,7 @@
 using CardPortal.Domain.AggregateModel.Account;
 using CardPortal.Domain.AggregateModel.Card;
 using CardPortal.Domain.AggregateModel.User;
+using CardPortal.Domain.AggregateModel.User.Profile;
 using CardPortal.Domain.AggregateModel.Vendor;
 using CardPortal.Domain.AggregateModel.Vendor.Address.Address;
 using CardPortal.Domain.AggregateModel.Vendor.Address.Area;
@@ -12,6 +13,8 @@ using CardPortal.Domain.Dto.Account;
 using CardPortal.Domain.Dto.Card;
 using CardPortal.Domain.Dto.Transaction;
 using CardPortal.Domain.Dto.User;
+using CardPortal.Domain.Dto.User.Login;
+using CardPortal.Domain.Dto.User.Profile;
 using CardPortal.Domain.Dto.Vendor;
 using CardPortal.Domain.Dto.Vendor.Address.Address;
 using CardPortal.Domain.Dto.Vendor.Address.Area;
@@ -57,6 +60,26 @@ namespace CardPortal.Application.AutoMapper
             #endregion Transaction
 
             #region User
+
+            #region Login
+
+            // Login Map
+            CreateMap<Login, LoginDto>();
+            CreateMap<LoginDto, Login>();
+
+            #endregion Login
+
+            #region Profile
+
+            // Change Name Map
+            CreateMap<ChangeName, ChangeNameDto>();
+            CreateMap<ChangeNameDto, ChangeName>();
+
+            // Change Password Map
+            CreateMap<ChangePassword, ChangePasswordDto>();
+            CreateMap<ChangePasswordDto, ChangePassword>();
+
+            #endregion Profile
 
             // User Map
             CreateMap<User, UserReadDto>();
